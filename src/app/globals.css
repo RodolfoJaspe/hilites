@@ -1,0 +1,460 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 224, 224, 224;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 26, 26, 26;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 224, 224, 224;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 26, 26, 26;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      rgb(var(--background-start-rgb)),
+      rgb(var(--background-end-rgb))
+    );
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+/* Date Navigation Styles - From original app */
+.date-navigation-container {
+  display: flex;
+  align-items: stretch;
+  background: #1a1a1a;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+}
+
+.date-navigation {
+  display: flex;
+  justify-content: flex-start;
+  padding: 16px 0px;
+  padding-bottom: 0px;
+  gap: 20px;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  flex: 1;
+  min-width: 0; /* Important for flex overflow */
+  scroll-behavior: smooth;
+}
+
+.date-navigation::-webkit-scrollbar {
+  display: none; /* WebKit */
+}
+
+.scroll-button {
+  background: #1a1a1a;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 16px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  z-index: 10;
+  flex-shrink: 0; /* Prevent buttons from shrinking */
+  min-width: 44px; /* Fixed minimum width for consistent sizing */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent; /* Remove blue highlight on mobile tap */
+  outline: none; /* Remove default outline */
+}
+
+.scroll-button:hover {
+  background: #333;
+}
+
+.scroll-button:active {
+  background: #555;
+}
+
+.scroll-button:focus-visible {
+  /* Only show outline for keyboard navigation, not touch */
+  outline: 2px solid #007bff;
+  outline-offset: -2px;
+}
+
+.scroll-left {
+  border-right: 1px solid #333;
+}
+
+.scroll-right {
+  border-left: 1px solid #333;
+}
+
+.date-option {
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  min-width: fit-content;
+  border-bottom: 2px solid #1a1a1a;
+}
+
+.date-option:hover {
+  color: #fff;
+}
+
+.date-option.active {
+  color: #fff;
+  border-bottom: 2px solid #ff4444;
+  position: relative;
+}
+
+.date-option.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 2px;
+  background: #ff4444;
+}
+
+/* Responsive Design for Date Navigation */
+@media (max-width: 768px) {
+  .date-navigation {
+    padding: 12px 0px;
+    padding-bottom: 0px;
+    gap: 16px;
+  }
+  
+  .date-option {
+    font-size: 13px;
+    padding: 12px 12px;
+  }
+  
+  .scroll-button {
+    font-size: 18px;
+    padding: 12px 8px;
+    min-width: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .date-navigation {
+    padding: 10px 0px;
+    padding-bottom: 0px;
+    gap: 12px;
+  }
+  
+  .date-option {
+    font-size: 12px;
+    padding: 12px 10px;
+  }
+  
+  .scroll-button {
+    font-size: 16px;
+    padding: 10px 6px;
+    min-width: 36px;
+  }
+}
+
+/* Match Card Styles - From original app */
+.match-card {
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+
+.match-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  border-color: #007bff;
+}
+
+.match-card.expanded {
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+}
+
+.match-competition {
+  font-size: 14px;
+  color: #007bff;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.match-teams-expanded {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.team-name-large {
+  font-size: 16px;
+  font-weight: 700;
+  color: #e0e0e0;
+  text-align: center;
+}
+
+.vs-text-large {
+  font-size: 18px;
+  color: #007bff;
+  font-weight: bold;
+  min-width: 40px;
+  text-align: center;
+}
+
+.match-info {
+  border-top: 1px solid #333;
+  padding-top: 20px;
+  margin-top: 20px;
+}
+
+.video-section {
+  margin-top: 20px;
+  padding-top: 20px;
+}
+
+.video-thumbnail-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.video-item {
+  background: #2a2a2a;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.video-item:hover {
+  transform: translateY(-2px);
+}
+
+.video-thumbnail {
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  background: #2a2a2a;
+}
+
+.video-thumbnail:hover {
+  transform: scale(1.02);
+}
+
+.video-thumbnail.not-clickable {
+  cursor: default !important;
+}
+
+.video-thumbnail.not-clickable:hover {
+  transform: none !important;
+}
+
+.video-thumbnail img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.thumbnail-placeholder {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  color: #666;
+  background: #2a2a2a;
+}
+
+.placeholder-content {
+  text-align: center;
+  padding: 20px;
+}
+
+.placeholder-content p {
+  color: #e0e0e0;
+  margin: 5px 0;
+}
+
+.placeholder-content small {
+  color: #888;
+  font-size: 0.8em;
+}
+
+.play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.video-thumbnail:hover .play-overlay {
+  opacity: 1;
+}
+
+.play-button-overlay {
+  background: #007bff;
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+}
+
+.video-title-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  padding: 15px 10px 10px;
+  color: white;
+}
+
+.video-title-overlay h5 {
+  margin: 0 0 5px 0;
+  font-size: 14px;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.video-title-overlay span {
+  font-size: 12px;
+  color: #ccc;
+}
+
+.video-info-overlay {
+  position: relative;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 10px;
+  color: white;
+  border-top: 1px solid #333;
+}
+
+.video-thumbnail:hover .video-info-overlay {
+  opacity: 1;
+}
+
+.video-info-overlay .flex {
+  display: flex;
+}
+
+.video-info-overlay .justify-between {
+  justify-content: space-between;
+}
+
+.video-info-overlay .items-center {
+  align-items: center;
+}
+
+.video-info-overlay .text-xs {
+  font-size: 11px;
+}
+
+.video-info-overlay .text-gray-300 {
+  color: #d1d5db;
+}
+
+.video-info-overlay .text-gray-400 {
+  color: #9ca3af;
+}
+
+.video-info-overlay .mt-1 {
+  margin-top: 4px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #333;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Date Navigation */
+.date-navigation select {
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  color: #e0e0e0;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+.date-navigation select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Buttons */
+.bg-primary-600 {
+  background-color: #007bff !important;
+}
+
+.hover\:bg-primary-700:hover {
+  background-color: #0056b3 !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .video-thumbnail-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .match-teams-expanded {
+    gap: 15px;
+  }
+  
+  .team-name-large {
+    font-size: 14px;
+  }
+  
+  .vs-text-large {
+    font-size: 16px;
+  }
+}
