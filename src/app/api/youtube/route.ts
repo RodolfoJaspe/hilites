@@ -24,8 +24,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Build search query for match highlights
-    const searchQuery = `${homeTeam} ${awayTeam} highlights ${new Date().getFullYear()}`;
+    // Build search query for match highlights - more specific for better results
+    const searchQuery = `"${homeTeam}" "${awayTeam}" highlights extended goals`;
     
     console.log(`Searching YouTube for: ${searchQuery}`);
 
@@ -33,8 +33,8 @@ export async function GET(request: NextRequest) {
       part: 'snippet',
       q: searchQuery,
       type: 'video',
-      maxResults: '5',
-      order: 'date',
+      maxResults: '10', // Get more results to filter by views
+      order: 'relevance', // Use relevance to balance views and recency
       key: YOUTUBE_API_KEY,
       videoDuration: 'medium', // Filter for medium length videos (4-20 min)
       videoEmbeddable: 'true', // Only embeddable videos
@@ -80,11 +80,20 @@ export async function GET(request: NextRequest) {
       embedUrl: `https://www.youtube.com/embed/${item.id.videoId}`,
     })) || [];
 
-    console.log(`Found ${videos.length} videos for ${searchQuery}`);
+    // Sort by view count (descending) to prioritize popular videos
+    videos.sort((a: any, b: any) => b.viewCount - a.viewCount);
+    
+    // Filter out videos with very low view counts (likely low quality)
+    const filteredVideos = videos.filter((video: any) => video.viewCount >= 1000);
+    
+    // Take top 5 videos with highest view counts
+    const topVideos = filteredVideos.slice(0, 5);
+
+    console.log(`Found ${videos.length} videos, ${filteredVideos.length} after filtering, selected top ${topVideos.length} by view count`);
 
     return NextResponse.json({
       success: true,
-      data: videos,
+      data: topVideos,
       query: searchQuery,
     });
 
