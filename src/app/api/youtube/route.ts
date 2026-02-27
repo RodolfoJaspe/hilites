@@ -84,12 +84,20 @@ export async function GET(request: NextRequest) {
     videos.sort((a: any, b: any) => b.viewCount - a.viewCount);
     
     // Filter out videos with very low view counts (likely low quality)
-    const filteredVideos = videos.filter((video: any) => video.viewCount >= 1000);
+    const filteredByViews = videos.filter((video: any) => video.viewCount >= 1000);
+    
+    // Filter out videos older than 30 days
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const filteredVideos = filteredByViews.filter((video: any) => {
+      const videoDate = new Date(video.publishedAt);
+      return videoDate >= thirtyDaysAgo;
+    });
     
     // Take top 5 videos with highest view counts
     const topVideos = filteredVideos.slice(0, 5);
 
-    console.log(`Found ${videos.length} videos, ${filteredVideos.length} after filtering, selected top ${topVideos.length} by view count`);
+    console.log(`Found ${videos.length} videos, ${filteredByViews.length} after view filtering, ${filteredVideos.length} after date filtering, selected top ${topVideos.length}`);
 
     return NextResponse.json({
       success: true,
