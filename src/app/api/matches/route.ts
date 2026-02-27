@@ -239,7 +239,7 @@ export async function GET(request: NextRequest) {
 
     // Apply status filter if specified (but don't filter out scheduled matches by default)
     const filteredMatches = params.status && params.status !== 'all'
-      ? paginatedMatches.filter(match => match.status === params.status)
+      ? paginatedMatches.filter((match: any) => match.status === params.status)
       : paginatedMatches;
 
     const response = {
@@ -269,43 +269,6 @@ export async function GET(request: NextRequest) {
         success: false,
         error: error.message || 'Failed to fetch matches',
         data: [],
-      },
-      { status: 500 }
-    );
-  }
-}
-
-// GET /api/matches/[id]
-export async function getMatchById(id: string) {
-  try {
-    console.log(`Fetching match details for ID: ${id}`);
-    
-    const url = `${FOOTBALL_API_BASE_URL}/matches/${id}`;
-    const response = await fetch(url, {
-      headers: {
-        'X-Auth-Token': FOOTBALL_API_KEY,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Football Data API error: ${response.status} ${response.statusText}`);
-    }
-
-    const matchData = await response.json();
-    const transformedMatch = transformMatch(matchData);
-
-    return NextResponse.json({
-      success: true,
-      data: transformedMatch,
-    });
-
-  } catch (error: any) {
-    console.error(`Error fetching match ${id}:`, error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: error.message || 'Failed to fetch match',
-        data: null,
       },
       { status: 500 }
     );
